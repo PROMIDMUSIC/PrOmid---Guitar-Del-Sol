@@ -115,7 +115,7 @@
             align-items: center;
             gap: 12px;
             margin-bottom: 22px;
-            direction: ltr; /* برای چپ‌چین شدن زمان‌ها */
+            direction: ltr;
         }
 
         .progress-section .time {
@@ -136,7 +136,7 @@
             position: relative;
             cursor: pointer;
             transition: height 0.2s;
-            direction: ltr; /* اطمینان از حرکت چپ به راست */
+            direction: ltr;
         }
 
         .progress-track:hover {
@@ -155,7 +155,7 @@
         .progress-fill::after {
             content: '';
             position: absolute;
-            right: -5px; /* دایره در انتهای نوار (راست) */
+            right: -5px;
             top: 50%;
             transform: translateY(-50%);
             width: 12px;
@@ -243,7 +243,7 @@
             gap: 14px;
             padding-top: 18px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
-            margin-bottom: 16px; /* فاصله کمتر با فوتر */
+            margin-bottom: 16px;
             direction: ltr;
         }
 
@@ -279,11 +279,11 @@
             text-align: center;
             padding-top: 4px;
             color: rgba(255, 255, 255, 0.2);
-            font-size: 11px; /* بسیار کوچک */
-            font-weight: 300; /* نازک */
+            font-size: 11px;
+            font-weight: 300;
             letter-spacing: 0.5px;
             user-select: none;
-            border-top: none; /* خط جداکننده حذف شد */
+            border-top: none;
             margin-top: 0;
         }
 
@@ -322,7 +322,7 @@
                 font-size: 13px;
             }
             .footer {
-                font-size: 9px; /* حتی کوچک‌تر در موبایل */
+                font-size: 9px;
             }
         }
 
@@ -339,18 +339,18 @@
             <span class="brand">🎧 <span>PROMID</span>MUSIC</span>
         </div>
 
-        <!-- کاور آلبوم -->
+        <!-- کاور آلبوم (لینک جدید) -->
         <div class="artwork-wrapper" id="artworkWrapper">
-            <img id="artworkImage" src="https://raw.githubusercontent.com/PROMIDMUSIC/my-music-player/main/PrOmid%20-%20Pause%20Hour%20.jpg" alt="Artwork">
+            <img id="artworkImage" src="https://raw.githubusercontent.com/PROMIDMUSIC/PrOmid---Guitar-Del-Sol/main/PrOmid%20-%20Guitar%20Del%20Sol.PNG" alt="Artwork">
         </div>
 
-        <!-- اطلاعات آهنگ -->
+        <!-- اطلاعات آهنگ جدید -->
         <div class="track-info">
-            <div class="title" id="trackTitle">Pause Hour</div>
+            <div class="title" id="trackTitle">Guitar Del Sol</div>
             <div class="artist" id="trackArtist">PrOmid</div>
         </div>
 
-        <!-- نوار پیشرفت (چپ به راست) -->
+        <!-- نوار پیشرفت -->
         <div class="progress-section">
             <span class="time" id="currentTime">0:00</span>
             <div class="progress-track" id="progressTrack">
@@ -366,7 +366,7 @@
             <button id="nextBtn" aria-label="بعدی" title="۱۰ ثانیه بعد">⏭</button>
         </div>
 
-        <!-- کنترل صدا (چپ به راست) -->
+        <!-- کنترل صدا -->
         <div class="volume-section">
             <span class="icon">🔊</span>
             <div class="volume-track" id="volumeTrack">
@@ -374,15 +374,15 @@
             </div>
         </div>
 
-        <!-- فوتر باریک و کوچک با ©PROMIDMUSIC -->
+        <!-- فوتر -->
         <div class="footer">
             <span>© PROMIDMUSIC</span>
         </div>
     </div>
 
-    <!-- المنت صوتی -->
+    <!-- المنت صوتی (لینک جدید) -->
     <audio id="audioPlayer" preload="metadata">
-        <source src="https://raw.githubusercontent.com/PROMIDMUSIC/my-music-player/main/PrOmid%20-%20Pause%20Hour.mp3" type="audio/mpeg">
+        <source src="https://raw.githubusercontent.com/PROMIDMUSIC/PrOmid---Guitar-Del-Sol/main/PrOmid%20-%20Guitar%20Del%20Sol.mp3" type="audio/mpeg">
         مرورگر شما از پلیر صوتی پشتیبانی نمی‌کند.
     </audio>
 
@@ -423,7 +423,7 @@
         });
 
         // =============================================
-        //  ۲. مدیریت زمان و نوار پیشرفت (چپ به راست)
+        //  ۲. مدیریت زمان و نوار پیشرفت
         // =============================================
         function formatTime(seconds) {
             if (isNaN(seconds) || seconds === Infinity) return '0:00';
@@ -460,7 +460,7 @@
         });
 
         // =============================================
-        //  ۴. کنترل صدا (چپ به راست)
+        //  ۴. کنترل صدا
         // =============================================
         audio.volume = 0.8;
         volumeFill.style.width = '80%';

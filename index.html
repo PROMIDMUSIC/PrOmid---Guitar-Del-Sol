@@ -2,8 +2,7 @@
 <html lang="fa" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <!-- ویوپورت بهینه برای موبایل -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, minimal-ui">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Guitar Del Sol | PrOmid</title>
@@ -40,7 +39,7 @@
             padding: 28px 26px 30px;
             width: 100%;
             height: 100vh;
-            height: calc(var(--vh, 1vh) * 100); /* برای رفع مشکل نوار مرورگر در اندروید */
+            height: calc(var(--vh, 1vh) * 100);
             max-width: 100%;
             max-height: 100%;
             display: flex;
@@ -342,6 +341,50 @@
         ::-webkit-scrollbar {
             display: none;
         }
+
+        /* دکمه تمام‌صفحه (فقط در موبایل) */
+        .fullscreen-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            z-index: 999;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .fullscreen-btn {
+                display: flex;
+            }
+        }
+
+        /* حالت تمام‌صفحه واقعی */
+        .player-card:-webkit-full-screen {
+            border-radius: 0 !important;
+            padding: 28px 26px 30px !important;
+        }
+
+        .player-card:fullscreen {
+            border-radius: 0 !important;
+            padding: 28px 26px 30px !important;
+        }
     </style>
 </head>
 
@@ -393,6 +436,11 @@
         </div>
     </div>
 
+    <!-- دکمه تمام‌صفحه -->
+    <button class="fullscreen-btn" id="fullscreenBtn">
+        <span>⛶</span> تمام‌صفحه
+    </button>
+
     <!-- المنت صوتی -->
     <audio id="audioPlayer" preload="metadata">
         <source src="https://raw.githubusercontent.com/PROMIDMUSIC/PrOmid---Guitar-Del-Sol/main/PrOmid%20-%20Guitar%20Del%20Sol.mp3" type="audio/mpeg">
@@ -401,7 +449,7 @@
 
     <script>
         // =============================================
-        //  اسکریپت کامل با ترفند مخفی کردن تولبار
+        //  اسکریپت کامل با قابلیت تمام‌صفحه واقعی
         // =============================================
 
         // ----- عناصر DOM -----
@@ -416,12 +464,14 @@
         const artworkImg = document.getElementById('artworkImage');
         const trackTitle = document.getElementById('trackTitle');
         const trackArtist = document.getElementById('trackArtist');
+        const playerCard = document.getElementById('playerCard');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
 
         // =============================================
-        //  ترفند مخفی کردن نوار مرورگر در موبایل
+        //  ترفند مخفی کردن نوار مرورگر (روش استاندارد)
         // =============================================
 
-        // ۱. تنظیم ارتفاع viewport برای اندروید
+        // تنظیم ارتفاع viewport
         function setVH() {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -429,17 +479,14 @@
         setVH();
         window.addEventListener('resize', setVH);
 
-        // ۲. مخفی کردن تولبار با اسکرول به بالا
+        // مخفی کردن تولبار با اسکرول
         function hideBrowserUI() {
-            // اسکرول به نقطه‌ای که نوار مرورگر را جمع کند
             window.scrollTo(0, 1);
-            // در برخی مرورگرها نیاز به اسکرول مجدد است
             setTimeout(() => {
                 window.scrollTo(0, 0);
             }, 50);
         }
 
-        // اجرا در زمان‌های مختلف
         window.addEventListener('load', () => {
             setTimeout(hideBrowserUI, 100);
             setTimeout(hideBrowserUI, 500);
@@ -450,21 +497,51 @@
             setTimeout(hideBrowserUI, 600);
         });
 
-        window.addEventListener('resize', () => {
-            setTimeout(hideBrowserUI, 200);
-        });
-
-        // با هر کلیک روی صفحه، تولبار جمع می‌شود
         document.addEventListener('click', hideBrowserUI);
         document.addEventListener('touchstart', hideBrowserUI, { passive: true });
 
-        // ۳. جلوگیری از اسکرول پایین (که تولبار را نشان دهد)
+        // جلوگیری از اسکرول پایین
         document.addEventListener('touchmove', (e) => {
             if (e.target.closest('.progress-track') || e.target.closest('.volume-track')) {
-                return; // اجازه اسکرول روی نوارها برای تغییر مکان
+                return;
             }
             e.preventDefault();
         }, { passive: false });
+
+        // =============================================
+        //  حالت تمام‌صفحه واقعی (Fullscreen API)
+        // =============================================
+
+        async function toggleFullscreen() {
+            try {
+                if (!document.fullscreenElement) {
+                    await document.documentElement.requestFullscreen();
+                    fullscreenBtn.textContent = '✕ خروج';
+                    fullscreenBtn.innerHTML = '<span>✕</span> خروج';
+                } else {
+                    if (document.exitFullscreen) {
+                        await document.exitFullscreen();
+                        fullscreenBtn.textContent = '⛶ تمام‌صفحه';
+                        fullscreenBtn.innerHTML = '<span>⛶</span> تمام‌صفحه';
+                    }
+                }
+            } catch (err) {
+                console.warn('خطا در تغییر حالت تمام‌صفحه:', err);
+                // اگر Fullscreen API کار نکرد، از روش اسکرول استفاده می‌کنیم
+                hideBrowserUI();
+                alert('لطفاً برای مشاهده تمام‌صفحه، روی دکمه "تمام‌صفحه" در مرورگر کلیک کنید.');
+            }
+        }
+
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+        // اگر کاربر با کلید ESC خارج شد، دکمه را به‌روز کن
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                fullscreenBtn.textContent = '⛶ تمام‌صفحه';
+                fullscreenBtn.innerHTML = '<span>⛶</span> تمام‌صفحه';
+            }
+        });
 
         // =============================================
         //  کنترل پخش و توقف
@@ -655,6 +732,7 @@
         });
 
         console.log('🎵 پلیر تمام‌صفحه PROMID با موفقیت راه‌اندازی شد!');
+        console.log('💡 برای تمام‌صفحه واقعی، روی دکمه پایین سمت راست کلیک کنید.');
     </script>
 </body>
 </html>

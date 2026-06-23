@@ -2,50 +2,61 @@
 <html lang="fa" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>پلیر اختصاصی | PROMID</title>
-    <style>
-        /* ----- فونت و ریست اولیه ----- */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap');
+    <!-- ویوپورت برای نمایش تمام‌صفحه و مخفی کردن نوار مرورگر -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Guitar Del Sol | PrOmid</title>
 
+    <!-- ===== استایل‌های اصلی ===== -->
+    <style>
+        /* ----- ریست و تنظیمات پایه ----- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* جلوگیری از اسکرول */
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #111;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
             transition: background-color 0.8s ease;
+            /* مخفی کردن نوار مرورگر در موبایل */
+            position: fixed;
+            top: 0;
+            left: 0;
         }
 
-        /* ----- کارت اصلی پلیر ----- */
+        /* ----- کارت پلیر (کاملاً تمام‌صفحه) ----- */
         .player-card {
             background: rgba(24, 24, 24, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 32px;
+            border-radius: 0; /* بدون گردی برای تمام‌صفحه */
             padding: 28px 26px 30px;
-            max-width: 420px;
             width: 100%;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06);
+            height: 100vh; /* تمام ارتفاع صفحه */
+            max-width: 100%;
+            max-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: none;
+            border: none;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            border: 1px solid rgba(255, 255, 255, 0.03);
         }
 
-        /* ----- هدر ----- */
+        /* ----- هدر (با نام آرتیست) ----- */
         .player-header {
             display: flex;
             justify-content: flex-start;
             align-items: center;
             margin-bottom: 22px;
+            flex-shrink: 0;
         }
 
         .player-header .brand {
@@ -60,16 +71,18 @@
             color: #1db954;
         }
 
-        /* ----- کاور آلبوم ----- */
+        /* ----- کاور آلبوم (بزرگ‌تر در تمام‌صفحه) ----- */
         .artwork-wrapper {
             position: relative;
             width: 100%;
-            padding-bottom: 100%;
+            max-width: 420px;
+            margin: 0 auto 26px;
+            aspect-ratio: 1/1;
             border-radius: 20px;
             overflow: hidden;
-            margin-bottom: 26px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             background: #1f1f1f;
+            flex-shrink: 0;
         }
 
         .artwork-wrapper img {
@@ -87,10 +100,11 @@
             opacity: 0;
         }
 
-        /* ----- اطلاعات آهنگ ----- */
+        /* ----- اطلاعات آهنگ (نام و آرتیست) ----- */
         .track-info {
             margin-bottom: 24px;
             text-align: center;
+            flex-shrink: 0;
         }
 
         .track-info .title {
@@ -109,13 +123,14 @@
             transition: opacity 0.4s;
         }
 
-        /* ----- نوار پیشرفت (چپ به راست) ----- */
+        /* ===== نوار پیشرفت و کنترل‌ها ===== */
         .progress-section {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 22px;
             direction: ltr;
+            flex-shrink: 0;
         }
 
         .progress-section .time {
@@ -171,13 +186,14 @@
             opacity: 1;
         }
 
-        /* ----- کنترل‌های اصلی ----- */
+        /* ----- دکمه‌های کنترل ----- */
         .controls {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 28px;
             margin-bottom: 22px;
+            flex-shrink: 0;
         }
 
         .controls button {
@@ -220,23 +236,15 @@
         }
 
         .controls .play-btn.playing {
-            background: #1db954;
-        }
-
-        @keyframes pulse-ring {
-            0% {
-                box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.4);
-            }
-            100% {
-                box-shadow: 0 0 0 20px rgba(29, 185, 84, 0);
-            }
-        }
-
-        .controls .play-btn.playing {
             animation: pulse-ring 1.8s infinite;
         }
 
-        /* ----- کنترل صدا (چپ به راست) ----- */
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.4); }
+            100% { box-shadow: 0 0 0 20px rgba(29, 185, 84, 0); }
+        }
+
+        /* ----- کنترل صدا ----- */
         .volume-section {
             display: flex;
             align-items: center;
@@ -245,6 +253,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             margin-bottom: 16px;
             direction: ltr;
+            flex-shrink: 0;
         }
 
         .volume-section .icon {
@@ -274,7 +283,7 @@
             background: #1db954;
         }
 
-        /* ----- فوتر باریک و کوچک با ©PROMIDMUSIC ----- */
+        /* ----- فوتر (فقط در صورت نیاز) ----- */
         .footer {
             text-align: center;
             padding-top: 4px;
@@ -283,19 +292,17 @@
             font-weight: 300;
             letter-spacing: 0.5px;
             user-select: none;
-            border-top: none;
-            margin-top: 0;
+            flex-shrink: 0;
         }
 
         .footer span {
             color: rgba(255, 255, 255, 0.25);
         }
 
-        /* ----- واکنش‌گرایی برای موبایل ----- */
+        /* ===== واکنش‌گرایی ===== */
         @media (max-width: 480px) {
             .player-card {
                 padding: 20px 16px 22px;
-                border-radius: 24px;
             }
             .track-info .title {
                 font-size: 18px;
@@ -317,6 +324,7 @@
             .artwork-wrapper {
                 border-radius: 16px;
                 margin-bottom: 20px;
+                max-width: 320px;
             }
             .player-header .brand {
                 font-size: 13px;
@@ -326,25 +334,40 @@
             }
         }
 
+        @media (min-width: 768px) {
+            /* در تبلت و دسکتاپ، پلیر به حالت معمولی برمی‌گردد */
+            .player-card {
+                border-radius: 32px;
+                max-width: 420px;
+                max-height: 90vh;
+                height: auto;
+                box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06);
+                border: 1px solid rgba(255, 255, 255, 0.03);
+            }
+            .artwork-wrapper {
+                max-width: 100%;
+            }
+        }
+
         ::-webkit-scrollbar {
             display: none;
         }
     </style>
 </head>
-<body>
 
+<body>
     <div class="player-card" id="playerCard">
         <!-- هدر -->
         <div class="player-header">
             <span class="brand">🎧 <span>PROMID</span>MUSIC</span>
         </div>
 
-        <!-- کاور آلبوم (لینک جدید) -->
+        <!-- کاور آلبوم -->
         <div class="artwork-wrapper" id="artworkWrapper">
             <img id="artworkImage" src="https://raw.githubusercontent.com/PROMIDMUSIC/PrOmid---Guitar-Del-Sol/main/PrOmid%20-%20Guitar%20Del%20Sol.PNG" alt="Artwork">
         </div>
 
-        <!-- اطلاعات آهنگ جدید -->
+        <!-- اطلاعات آهنگ (نام و آرتیست) -->
         <div class="track-info">
             <div class="title" id="trackTitle">Guitar Del Sol</div>
             <div class="artist" id="trackArtist">PrOmid</div>
@@ -380,13 +403,17 @@
         </div>
     </div>
 
-    <!-- المنت صوتی (لینک جدید) -->
+    <!-- المنت صوتی -->
     <audio id="audioPlayer" preload="metadata">
         <source src="https://raw.githubusercontent.com/PROMIDMUSIC/PrOmid---Guitar-Del-Sol/main/PrOmid%20-%20Guitar%20Del%20Sol.mp3" type="audio/mpeg">
         مرورگر شما از پلیر صوتی پشتیبانی نمی‌کند.
     </audio>
 
     <script>
+        // =============================================
+        //  اسکریپت کامل پلیر با پشتیبانی از Media Session API
+        // =============================================
+
         // ----- عناصر DOM -----
         const audio = document.getElementById('audioPlayer');
         const playBtn = document.getElementById('playBtn');
@@ -397,6 +424,12 @@
         const volumeFill = document.getElementById('volumeFill');
         const volumeTrack = document.getElementById('volumeTrack');
         const artworkImg = document.getElementById('artworkImage');
+        const trackTitle = document.getElementById('trackTitle');
+        const trackArtist = document.getElementById('trackArtist');
+
+        // ----- اطلاعات آهنگ برای نمایش روی صفحه قفل -----
+        const songTitle = trackTitle.textContent;
+        const songArtist = trackArtist.textContent;
 
         // =============================================
         //  ۱. کنترل پخش و توقف
@@ -406,10 +439,12 @@
                 audio.play().catch(e => console.warn('خطا در پخش:', e));
                 playBtn.textContent = '⏸';
                 playBtn.classList.add('playing');
+                updateMediaSession(true); // به‌روزرسانی وضعیت پخش
             } else {
                 audio.pause();
                 playBtn.textContent = '▶';
                 playBtn.classList.remove('playing');
+                updateMediaSession(false);
             }
         }
 
@@ -436,10 +471,27 @@
             const percent = (audio.currentTime / audio.duration) * 100 || 0;
             progressFill.style.width = Math.min(percent, 100) + '%';
             currentTimeEl.textContent = formatTime(audio.currentTime);
+
+            // به‌روزرسانی موقعیت پخش در Media Session
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.setPositionState({
+                    duration: audio.duration || 0,
+                    position: audio.currentTime || 0,
+                    playbackRate: audio.playbackRate,
+                });
+            }
         });
 
         audio.addEventListener('loadedmetadata', () => {
             totalTimeEl.textContent = formatTime(audio.duration);
+            // تنظیم مدت زمان در Media Session
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.setPositionState({
+                    duration: audio.duration || 0,
+                    position: 0,
+                    playbackRate: audio.playbackRate,
+                });
+            }
         });
 
         progressTrack.addEventListener('click', (e) => {
@@ -482,10 +534,7 @@
             canvas.height = 20;
             ctx.drawImage(imageElement, 0, 0, 20, 20);
             const imageData = ctx.getImageData(0, 0, 20, 20).data;
-            let r = 0,
-                g = 0,
-                b = 0,
-                count = 0;
+            let r = 0, g = 0, b = 0, count = 0;
             for (let i = 0; i < imageData.length; i += 4) {
                 r += imageData[i];
                 g += imageData[i + 1];
@@ -512,14 +561,92 @@
         }
 
         // =============================================
-        //  ۶. مدیریت خطاها
+        //  ۶. Media Session API (نمایش روی صفحه قفل)
+        // =============================================
+        function updateMediaSession(isPlaying) {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+            }
+        }
+
+        if ('mediaSession' in navigator) {
+            // تنظیم اطلاعات آهنگ برای نمایش روی صفحه قفل
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: songTitle,
+                artist: songArtist,
+                album: 'Guitar Del Sol',
+                artwork: [
+                    {
+                        src: 'https://raw.githubusercontent.com/PROMIDMUSIC/PrOmid---Guitar-Del-Sol/main/PrOmid%20-%20Guitar%20Del%20Sol.PNG',
+                        sizes: '512x512',
+                        type: 'image/png'
+                    }
+                ]
+            });
+
+            // کنترل‌های صفحه قفل
+            navigator.mediaSession.setActionHandler('play', () => {
+                audio.play();
+                playBtn.textContent = '⏸';
+                playBtn.classList.add('playing');
+                updateMediaSession(true);
+            });
+
+            navigator.mediaSession.setActionHandler('pause', () => {
+                audio.pause();
+                playBtn.textContent = '▶';
+                playBtn.classList.remove('playing');
+                updateMediaSession(false);
+            });
+
+            navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+                audio.currentTime = Math.max(0, audio.currentTime - (details.seekOffset || 10));
+            });
+
+            navigator.mediaSession.setActionHandler('seekforward', (details) => {
+                audio.currentTime = Math.min(audio.duration, audio.currentTime + (details.seekOffset || 10));
+            });
+
+            navigator.mediaSession.setActionHandler('seekto', (details) => {
+                if (details.fastSeek && 'fastSeek' in audio) {
+                    audio.fastSeek(details.seekTime);
+                    return;
+                }
+                audio.currentTime = details.seekTime;
+            });
+
+            console.log('✅ Media Session API فعال شد. اطلاعات آهنگ روی صفحه قفل نمایش داده می‌شود.');
+        } else {
+            console.log('ℹ️ مرورگر شما از Media Session API پشتیبانی نمی‌کند.');
+        }
+
+        // =============================================
+        //  ۷. مدیریت خطاها
         // =============================================
         audio.addEventListener('error', (e) => {
             console.warn('⚠️ خطا در پخش فایل صوتی:', e);
         });
 
-        console.log('🎵 پلیر نهایی PROMID با موفقیت راه‌اندازی شد!');
-    </script>
+        // =============================================
+        //  ۸. مخفی کردن نوار مرورگر در موبایل
+        // =============================================
+        // این تابع تلاش می‌کند نوار مرورگر را در موبایل جمع کند
+        function hideBrowserUI() {
+            if (window.innerHeight < window.outerHeight) {
+                window.scrollTo(0, 1);
+            }
+        }
 
+        // اجرا در هنگام بارگذاری و تغییر جهت صفحه
+        window.addEventListener('load', hideBrowserUI);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(hideBrowserUI, 300);
+        });
+
+        // در اندروید، با کلیک روی صفحه نیز تلاش می‌کند
+        document.addEventListener('click', hideBrowserUI);
+
+        console.log('🎵 پلیر تمام‌صفحه PROMID با موفقیت راه‌اندازی شد!');
+    </script>
 </body>
 </html>

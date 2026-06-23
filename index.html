@@ -2,11 +2,12 @@
 <html lang="fa" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <!-- ویوپورت برای نمایش تمام‌صفحه و مخفی کردن نوار مرورگر -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- ویوپورت بهینه برای موبایل -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Guitar Del Sol | PrOmid</title>
 
-    <!-- ===== استایل‌های اصلی ===== -->
     <style>
         /* ----- ریست و تنظیمات پایه ----- */
         * {
@@ -18,28 +19,28 @@
         html, body {
             width: 100%;
             height: 100%;
-            overflow: hidden; /* جلوگیری از اسکرول */
+            overflow: hidden;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #111;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: background-color 0.8s ease;
-            /* مخفی کردن نوار مرورگر در موبایل */
             position: fixed;
             top: 0;
             left: 0;
         }
 
-        /* ----- کارت پلیر (کاملاً تمام‌صفحه) ----- */
+        /* ----- کارت پلیر تمام‌صفحه ----- */
         .player-card {
             background: rgba(24, 24, 24, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 0; /* بدون گردی برای تمام‌صفحه */
+            border-radius: 0;
             padding: 28px 26px 30px;
             width: 100%;
-            height: 100vh; /* تمام ارتفاع صفحه */
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100); /* برای رفع مشکل نوار مرورگر در اندروید */
             max-width: 100%;
             max-height: 100%;
             display: flex;
@@ -50,7 +51,7 @@
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* ----- هدر (با نام آرتیست) ----- */
+        /* ----- هدر ----- */
         .player-header {
             display: flex;
             justify-content: flex-start;
@@ -71,7 +72,7 @@
             color: #1db954;
         }
 
-        /* ----- کاور آلبوم (بزرگ‌تر در تمام‌صفحه) ----- */
+        /* ----- کاور آلبوم ----- */
         .artwork-wrapper {
             position: relative;
             width: 100%;
@@ -96,11 +97,7 @@
             opacity: 1;
         }
 
-        .artwork-wrapper img.fade-out {
-            opacity: 0;
-        }
-
-        /* ----- اطلاعات آهنگ (نام و آرتیست) ----- */
+        /* ----- اطلاعات آهنگ ----- */
         .track-info {
             margin-bottom: 24px;
             text-align: center;
@@ -113,14 +110,12 @@
             font-weight: 700;
             letter-spacing: -0.5px;
             margin-bottom: 4px;
-            transition: opacity 0.4s;
         }
 
         .track-info .artist {
             color: #b0b0b0;
             font-size: 15px;
             font-weight: 400;
-            transition: opacity 0.4s;
         }
 
         /* ===== نوار پیشرفت و کنترل‌ها ===== */
@@ -138,7 +133,6 @@
             font-size: 12px;
             font-weight: 500;
             min-width: 38px;
-            letter-spacing: 0.2px;
             font-variant-numeric: tabular-nums;
             text-align: center;
         }
@@ -283,7 +277,7 @@
             background: #1db954;
         }
 
-        /* ----- فوتر (فقط در صورت نیاز) ----- */
+        /* ----- فوتر ----- */
         .footer {
             text-align: center;
             padding-top: 4px;
@@ -326,16 +320,12 @@
                 margin-bottom: 20px;
                 max-width: 320px;
             }
-            .player-header .brand {
-                font-size: 13px;
-            }
             .footer {
                 font-size: 9px;
             }
         }
 
         @media (min-width: 768px) {
-            /* در تبلت و دسکتاپ، پلیر به حالت معمولی برمی‌گردد */
             .player-card {
                 border-radius: 32px;
                 max-width: 420px;
@@ -362,12 +352,12 @@
             <span class="brand">🎧 <span>PROMID</span>MUSIC</span>
         </div>
 
-        <!-- کاور آلبوم -->
-        <div class="artwork-wrapper" id="artworkWrapper">
+        <!-- کاور -->
+        <div class="artwork-wrapper">
             <img id="artworkImage" src="https://raw.githubusercontent.com/PROMIDMUSIC/PrOmid---Guitar-Del-Sol/main/PrOmid%20-%20Guitar%20Del%20Sol.PNG" alt="Artwork">
         </div>
 
-        <!-- اطلاعات آهنگ (نام و آرتیست) -->
+        <!-- اطلاعات آهنگ -->
         <div class="track-info">
             <div class="title" id="trackTitle">Guitar Del Sol</div>
             <div class="artist" id="trackArtist">PrOmid</div>
@@ -382,7 +372,7 @@
             <span class="time" id="totalTime">0:00</span>
         </div>
 
-        <!-- دکمه‌های کنترل -->
+        <!-- دکمه‌ها -->
         <div class="controls">
             <button id="prevBtn" aria-label="قبلی" title="۱۰ ثانیه قبل">⏮</button>
             <button class="play-btn" id="playBtn" aria-label="پخش یا توقف">▶</button>
@@ -411,7 +401,7 @@
 
     <script>
         // =============================================
-        //  اسکریپت کامل پلیر با پشتیبانی از Media Session API
+        //  اسکریپت کامل با ترفند مخفی کردن تولبار
         // =============================================
 
         // ----- عناصر DOM -----
@@ -427,19 +417,64 @@
         const trackTitle = document.getElementById('trackTitle');
         const trackArtist = document.getElementById('trackArtist');
 
-        // ----- اطلاعات آهنگ برای نمایش روی صفحه قفل -----
-        const songTitle = trackTitle.textContent;
-        const songArtist = trackArtist.textContent;
+        // =============================================
+        //  ترفند مخفی کردن نوار مرورگر در موبایل
+        // =============================================
+
+        // ۱. تنظیم ارتفاع viewport برای اندروید
+        function setVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        setVH();
+        window.addEventListener('resize', setVH);
+
+        // ۲. مخفی کردن تولبار با اسکرول به بالا
+        function hideBrowserUI() {
+            // اسکرول به نقطه‌ای که نوار مرورگر را جمع کند
+            window.scrollTo(0, 1);
+            // در برخی مرورگرها نیاز به اسکرول مجدد است
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 50);
+        }
+
+        // اجرا در زمان‌های مختلف
+        window.addEventListener('load', () => {
+            setTimeout(hideBrowserUI, 100);
+            setTimeout(hideBrowserUI, 500);
+        });
+
+        window.addEventListener('orientationchange', () => {
+            setTimeout(hideBrowserUI, 300);
+            setTimeout(hideBrowserUI, 600);
+        });
+
+        window.addEventListener('resize', () => {
+            setTimeout(hideBrowserUI, 200);
+        });
+
+        // با هر کلیک روی صفحه، تولبار جمع می‌شود
+        document.addEventListener('click', hideBrowserUI);
+        document.addEventListener('touchstart', hideBrowserUI, { passive: true });
+
+        // ۳. جلوگیری از اسکرول پایین (که تولبار را نشان دهد)
+        document.addEventListener('touchmove', (e) => {
+            if (e.target.closest('.progress-track') || e.target.closest('.volume-track')) {
+                return; // اجازه اسکرول روی نوارها برای تغییر مکان
+            }
+            e.preventDefault();
+        }, { passive: false });
 
         // =============================================
-        //  ۱. کنترل پخش و توقف
+        //  کنترل پخش و توقف
         // =============================================
         function togglePlay() {
             if (audio.paused) {
                 audio.play().catch(e => console.warn('خطا در پخش:', e));
                 playBtn.textContent = '⏸';
                 playBtn.classList.add('playing');
-                updateMediaSession(true); // به‌روزرسانی وضعیت پخش
+                updateMediaSession(true);
             } else {
                 audio.pause();
                 playBtn.textContent = '▶';
@@ -458,7 +493,7 @@
         });
 
         // =============================================
-        //  ۲. مدیریت زمان و نوار پیشرفت
+        //  مدیریت زمان و نوار پیشرفت
         // =============================================
         function formatTime(seconds) {
             if (isNaN(seconds) || seconds === Infinity) return '0:00';
@@ -472,7 +507,6 @@
             progressFill.style.width = Math.min(percent, 100) + '%';
             currentTimeEl.textContent = formatTime(audio.currentTime);
 
-            // به‌روزرسانی موقعیت پخش در Media Session
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.setPositionState({
                     duration: audio.duration || 0,
@@ -484,7 +518,6 @@
 
         audio.addEventListener('loadedmetadata', () => {
             totalTimeEl.textContent = formatTime(audio.duration);
-            // تنظیم مدت زمان در Media Session
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.setPositionState({
                     duration: audio.duration || 0,
@@ -501,7 +534,7 @@
         });
 
         // =============================================
-        //  ۳. دکمه‌های جلو و عقب
+        //  دکمه‌های جلو و عقب
         // =============================================
         document.getElementById('prevBtn').addEventListener('click', () => {
             audio.currentTime = Math.max(0, audio.currentTime - 10);
@@ -512,7 +545,7 @@
         });
 
         // =============================================
-        //  ۴. کنترل صدا
+        //  کنترل صدا
         // =============================================
         audio.volume = 0.8;
         volumeFill.style.width = '80%';
@@ -525,7 +558,7 @@
         });
 
         // =============================================
-        //  ۵. تغییر رنگ پس‌زمینه بر اساس کاور
+        //  تغییر رنگ پس‌زمینه بر اساس کاور
         // =============================================
         function extractDominantColor(imageElement) {
             const canvas = document.createElement('canvas');
@@ -561,7 +594,7 @@
         }
 
         // =============================================
-        //  ۶. Media Session API (نمایش روی صفحه قفل)
+        //  Media Session API (صفحه قفل)
         // =============================================
         function updateMediaSession(isPlaying) {
             if ('mediaSession' in navigator) {
@@ -570,10 +603,9 @@
         }
 
         if ('mediaSession' in navigator) {
-            // تنظیم اطلاعات آهنگ برای نمایش روی صفحه قفل
             navigator.mediaSession.metadata = new MediaMetadata({
-                title: songTitle,
-                artist: songArtist,
+                title: trackTitle.textContent,
+                artist: trackArtist.textContent,
                 album: 'Guitar Del Sol',
                 artwork: [
                     {
@@ -584,7 +616,6 @@
                 ]
             });
 
-            // کنترل‌های صفحه قفل
             navigator.mediaSession.setActionHandler('play', () => {
                 audio.play();
                 playBtn.textContent = '⏸';
@@ -614,37 +645,14 @@
                 }
                 audio.currentTime = details.seekTime;
             });
-
-            console.log('✅ Media Session API فعال شد. اطلاعات آهنگ روی صفحه قفل نمایش داده می‌شود.');
-        } else {
-            console.log('ℹ️ مرورگر شما از Media Session API پشتیبانی نمی‌کند.');
         }
 
         // =============================================
-        //  ۷. مدیریت خطاها
+        //  مدیریت خطاها
         // =============================================
         audio.addEventListener('error', (e) => {
             console.warn('⚠️ خطا در پخش فایل صوتی:', e);
         });
-
-        // =============================================
-        //  ۸. مخفی کردن نوار مرورگر در موبایل
-        // =============================================
-        // این تابع تلاش می‌کند نوار مرورگر را در موبایل جمع کند
-        function hideBrowserUI() {
-            if (window.innerHeight < window.outerHeight) {
-                window.scrollTo(0, 1);
-            }
-        }
-
-        // اجرا در هنگام بارگذاری و تغییر جهت صفحه
-        window.addEventListener('load', hideBrowserUI);
-        window.addEventListener('orientationchange', () => {
-            setTimeout(hideBrowserUI, 300);
-        });
-
-        // در اندروید، با کلیک روی صفحه نیز تلاش می‌کند
-        document.addEventListener('click', hideBrowserUI);
 
         console.log('🎵 پلیر تمام‌صفحه PROMID با موفقیت راه‌اندازی شد!');
     </script>
